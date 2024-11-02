@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   let host = 'http://localhost:8080';
 
-  // Login form submission
+  // 로그인
   $('#login').submit(function(event) {
     event.preventDefault();
     const formData = {
@@ -18,6 +18,9 @@ $(document).ready(function() {
       success: function(response) {
         // Handle successful login
         alert('로그인 성공');
+        // 유저 정보 저장
+        sessionStorage.setItem('username', response.username); // Save username in session storage
+        
         window.location.href = 'index.html'; // Redirect to main page
       },
       error: function(error) {
@@ -27,7 +30,7 @@ $(document).ready(function() {
     });
   });
 
-  // Register form submission
+  // 회원가입
   $('#register').submit(function(event) {
     event.preventDefault();
     const formData = {
@@ -54,5 +57,6 @@ $(document).ready(function() {
         alert('회원가입 실패: ' + error.responseText);
       }
     });
-  });
+  });  
 });
+
