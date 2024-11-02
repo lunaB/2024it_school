@@ -1,20 +1,23 @@
 $(document).ready(function() {
+
+  let host = 'http://localhost:8080';
+
   // Login form submission
   $('#login').submit(function(event) {
     event.preventDefault();
     const formData = {
-      id: $('input[name="id"]').val(),
-      pw: $('input[name="pw"]').val()
+      username: $('input[name="username"]').val(),
+      password: $('input[name="password"]').val()
     };
 
     $.ajax({
       type: 'POST',
-      url: '/api/login', // Adjust the URL to your login endpoint
+      url: '/v1/auth/login',
       data: JSON.stringify(formData),
       contentType: 'application/json',
       success: function(response) {
         // Handle successful login
-        alert('로그인 성공!');
+        alert('로그인 성공');
         window.location.href = 'index.html'; // Redirect to main page
       },
       error: function(error) {
@@ -28,10 +31,8 @@ $(document).ready(function() {
   $('#register').submit(function(event) {
     event.preventDefault();
     const formData = {
-      id: $('input[name="id"]').val(),
-      user_name: $('input[name="user_name"]').val(),
-      pw: $('input[name="pw"]').val(),
-      pw_re: $('input[name="pw_re"]').val()
+      username: $('input[name="username"]').val(),
+      password: $('input[name="password"]').val(),
     };
 
     if (formData.pw !== formData.pw_re) {
@@ -41,13 +42,12 @@ $(document).ready(function() {
 
     $.ajax({
       type: 'POST',
-      url: '/api/register', // Adjust the URL to your register endpoint
+      url: host+'/v1/auth/new-user',
       data: JSON.stringify(formData),
       contentType: 'application/json',
       success: function(response) {
-        // Handle successful registration
-        alert('회원가입 성공!');
-        window.location.href = 'login.html'; // Redirect to login page
+        alert('회원가입이 완료되었습니다.');
+        window.location.href = 'login.html';
       },
       error: function(error) {
         // Handle registration error
