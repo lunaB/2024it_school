@@ -5,21 +5,25 @@ $(document).ready(function() {
   // 로그인
   $('#login').submit(function(event) {
     event.preventDefault();
+
+    console.log($('input[name="username"]').val())
+
     const formData = {
       username: $('input[name="username"]').val(),
       password: $('input[name="password"]').val()
     };
-
     $.ajax({
-      type: 'POST',
-      url: '/v1/auth/login',
+      method: 'POST',
+      url: host+'/v1/auth/login',
       data: JSON.stringify(formData),
       contentType: 'application/json',
       success: function(response) {
         // Handle successful login
         alert('로그인 성공');
         // 유저 정보 저장
-        sessionStorage.setItem('username', response.username); // Save username in session storage
+        console.log(response)
+
+        sessionStorage.setItem('username', $('input[name="username"]').val()); // Save username in session storage
         
         window.location.href = 'index.html'; // Redirect to main page
       },
@@ -28,7 +32,7 @@ $(document).ready(function() {
         alert('로그인 실패: ' + error.responseText);
       }
     });
-  });
+  })
 
   // 회원가입
   $('#register').submit(function(event) {
@@ -57,6 +61,5 @@ $(document).ready(function() {
         alert('회원가입 실패: ' + error.responseText);
       }
     });
-  });  
-});
-
+  })
+})
