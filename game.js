@@ -4,17 +4,17 @@ $(document).ready(function () {
     const port = '8080';
 
     const keySets = {
-        easy: [
+        shallow: [
             ["ArrowUp", "ArrowRight", "ArrowDown"],
             ["ArrowLeft", "ArrowRight", "ArrowUp"],
             ["ArrowDown", "ArrowUp", "ArrowLeft"]
         ],
-        medium: [
+        thermocline: [
             ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp"],
             ["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"],
             ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "ArrowDown"]
         ],
-        hard: [
+        deep: [
             ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"],
             ["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"],
             ["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowUp", "ArrowRight"]
@@ -22,8 +22,8 @@ $(document).ready(function () {
     };
 
     let gameActive = false;
-    let difficulty = "medium";
-    let selectedKeys = keySets[difficulty] || keySets["medium"];
+    let difficulty = window.appData.fishing_rods.find(rod => rod.equipped === 1).grade || "thermocline";
+    let selectedKeys = keySets[difficulty];
     let requiredKeys = selectedKeys[Math.floor(Math.random() * selectedKeys.length)];
 
     let currentKeyIndex = 0;
