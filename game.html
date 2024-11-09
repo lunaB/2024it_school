@@ -365,33 +365,7 @@
           });
         },
 
-        // 낚시 실패
-        // POST /v1/game/fail
-        failGame() {
-          const username = sessionStorage.getItem('username');
-
-          $.ajax({
-            url: this.host+":"+this.port+'/v1/game/fail',
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            data: JSON.stringify({ username: username }),
-            success: (response) => {
-              if (response.success) {
-                console.log('Game fail recorded successfully');
-              } else {
-                console.error('Failed to record game fail');
-              }
-
-              // 실패동작
-              this.cat = "fishing4";
-            },
-            error: (error) => {
-              console.error('Error recording game fail:', error);
-            }
-          });
-        },
+        
 
         
         // 낚시대 장착

@@ -27,7 +27,7 @@ $(document).ready(function () {
     
     let currentKeyIndex = 0;
     let gauge = 0;
-    const timeLimit = 15000; // 총 제한 시간 15초
+    const timeLimit = 5000; // 총 제한 시간 15초
     const timePerKey = 1000; // 키당 1초
     let intervalId;
 
@@ -116,5 +116,33 @@ $(document).ready(function () {
         }
       });
     }
+
+    // 낚시 실패
+    // POST /v1/game/fail
+    function failGame() {
+        const username = sessionStorage.getItem('username');
+
+        $.ajax({
+            url: host+":"+port+'/v1/game/fail',
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({ username: username }),
+            success: (response) => {
+            if (response.success) {
+                console.log('Game fail recorded successfully');
+            } else {
+                console.error('Failed to record game fail');
+            }
+
+            // 실패동작
+            this.cat = "fishing4";
+            },
+            error: (error) => {
+            console.error('Error recording game fail:', error);
+            }
+        });
+        }
 });
 
