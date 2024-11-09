@@ -253,7 +253,7 @@
   <script type="module">
     import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 
-    const app = createApp({
+    export const app = createApp({
       data() {
         return {
           host: "http://localhost",
@@ -519,8 +519,8 @@
           });
         }
       }
-    })
-    app.mount('#app')
+    }).mount('#app')
+    window.appData = app.$data;
   </script>
 </body>
 
