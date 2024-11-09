@@ -11,7 +11,7 @@
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="common.js"></script>
-  <script src="game.js"></script>
+  
   <style>
     #app {
       max-height: 1000px;
@@ -385,7 +385,7 @@
   <script type="module">
     import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 
-    const app = createApp({
+    export const app = createApp({
       mounted() {
         this.loadGameData()
       },
@@ -430,7 +430,9 @@
             { name: '마라탕', saturation: 55, price: 4700 },
           ],
 
-          fish: []
+          fish: [],
+
+          current_depth_level: ""
         }
       },
 
@@ -590,6 +592,7 @@
                 console.log('Item bought successfully');
 
                 this.loadGameData();
+                
 
               } else {
                 console.error('Failed to buy item');
@@ -681,9 +684,9 @@
                 this.money = response.price
                 // 배고픔
                 this.hunger = response.hunger
-                
-
-                console.log(response)
+                // 낚시
+                this.current_depth_level = response.current_depth_level
+                console.log(response.current_depth_level)
               } else {
                 console.error('Failed to load game data');
               }
@@ -755,13 +758,13 @@
           });
         }
       }
-    })
-    app.mount('#app');
-
+    }).mount('#app');
+    window.appData = app.$data;
   </script>
   <script>
     var a = 0;
   </script>
+  <script src="game.js"></script>
 </body>
 
 </html>
