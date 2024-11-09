@@ -21,15 +21,17 @@ $(document).ready(function () {
         ]
     };
 
+    let gameActive = false;
     let difficulty = "medium";
     let selectedKeys = keySets[difficulty] || keySets["medium"];
     let requiredKeys = selectedKeys[Math.floor(Math.random() * selectedKeys.length)];
 
     let currentKeyIndex = 0;
     let gauge = 0;
-    const timeLimit = 5000; // 총 제한 시간 15초
+    const timeLimit = 5000; // 총 제한 시간 5초
     const timePerKey = 1000; // 키당 1초
     let intervalId;
+
 
 
     // 게임 닫기
@@ -48,7 +50,13 @@ $(document).ready(function () {
 
         console.log(1);
         $('#game').css('display', 'block');
+        gameActive = true;
+        currentKeyIndex = 0;
+        gauge = 0;
+        updateProgress();
         showNextKey();
+        $(document).on("keydown", handleKeyPress);
+
         let elapsed = 0;
 
         intervalId = setInterval(() => {
@@ -62,6 +70,28 @@ $(document).ready(function () {
         }, timePerKey);
     }
 
+    function endGame() {
+        gameActive = false;
+        clearInterval(intervalId);
+    }
+    
+    function handleKeyPress(event) {
+        if (!gameActive) return;
+        
+        if (event.key === requiredKeys[currentKeyIndex]) {
+            gauge += 100 / requiredKeys.length; // 게이지 증가
+            updateProgress();
+            currentKeyIndex++;
+
+            // 모든 키 입력이 완료되면 게이지가 100%로 채워짐
+            if (currentKeyIndex === requiredKeys.length) {
+                clearInterval(intervalId); // 타이머 중지
+                successGame();
+            } else {    
+                showNextKey(); // 다음 키로 넘어가기
+            }
+        }
+    }
     // 현재 키를 화면에 표시
     function showNextKey() {
         if (currentKeyIndex < requiredKeys.length) {
@@ -72,26 +102,10 @@ $(document).ready(function () {
 
     // 게이지 업데이트
     function updateProgress() {
-        $(".progress").css("width", `${gauge}%`);
+        console.log("update")
+        console.log(gauge)
+        $(".progress").attr("value", `${gauge}`);
     }
-
-    // 키 입력 성공 시 진행
-    $(document).keydown(function (event) {
-
-        if (event.key === requiredKeys[currentKeyIndex]) {
-            gauge += 100 / requiredKeys.length; // 게이지 증가
-            updateProgress();
-            currentKeyIndex++;
-
-            // 모든 키 입력이 완료되면 게이지가 100%로 채워짐
-            if (currentKeyIndex === requiredKeys.length) {
-                clearInterval(intervalId); // 타이머 중지
-                successGame();
-            } else {
-                showNextKey(); // 다음 키로 넘어가기
-            }
-        }
-    });
 
     // 낚시 성공
     // POST /v1/game/success
@@ -150,6 +164,7 @@ $(document).ready(function () {
             }
         });
     }
+
     function showGameResult(boolResult) {
         let resultText
         if (boolResult) {
@@ -163,7 +178,7 @@ $(document).ready(function () {
 
     $('#replay-fishing-game').click(function (evnt) {
         $("#game-result-overlay").css("display", 'none');
-        startGame()
+        startGame();
     })
 
     $('#finish-fishing-game').click(function (evnt) {
