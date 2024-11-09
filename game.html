@@ -21,25 +21,30 @@
     .ptr:hover {
       background-color: rgba(0, 0, 0, 0.1);
     }
+
     .table-container {
-            margin: 20px;
-            overflow: auto;
-        }
-        th {
-            background-color: #00d1b2;
-            color: white;
-        }
-        td {
-            vertical-align: middle;
-        }
-        .fish-image {
-            width: 50px;
-            height: auto;
-            border-radius: 5px;
-        }
-        .button.is-danger {
-            margin-left: 10px;
-        }
+      margin: 20px;
+      overflow: auto;
+    }
+
+    th {
+      background-color: #00d1b2;
+      color: white;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+
+    .fish-image {
+      width: 50px;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .button.is-danger {
+      margin-left: 10px;
+    }
   </style>
 </head>
 
@@ -146,129 +151,161 @@
 
             <!-- Inventory -->
             <div id="inventory" style="position: absolute; top: 0%; left: 0%; display:none;">
-              <div class="box" style="width:100%; height: 800px;">
+              <div class="box" style="width:1345px; height: 800px;">
                 <div class="box_header" style="position: relative; ">
                   <p class="title is-2" style="padding: 15px 0;">인벤토리</p>
                   <button class="button is-danger is-outlined" style="position: absolute; top: 0; left: 1190px;"
                     @click="exitInventory">Close X</button>
                 </div>
                 <div class="columns is-multiline" style="max-height: 680px; overflow-y: scroll;">
-                  <div class="column is-3" v-for="item in items" :key="item.name">
-                    <div class="card" v-if="item.quantity > 0">
-                      <div class="card-image">
-                        <figure class="image is-4by3" style="border-bottom: 1px solid #ddd;">
-                          <img src="./resource/cat.png" alt="Placeholder image" />
-                        </figure>
-                      </div>
-                      <div class="card-content">
-                        <div class="media">
-                          <div class="media-left">
-                            <p class="title is-4" style="align-items: center; align-content: center;">{{item.name}}</p>
-                          </div>
-                          <div class="media-content">
-                            <p class="title is-4">수량 : {{item.quantity}}</p>
-                            <p class="subtitle is-7 mt-2">{{item.desc}}</p>
+                  <template v-for="item in items" :key="item.name">
+                    <div class="column is-3"
+                      v-if="item.type == 'food'  && item.quantity > 0 || item.type=='fish' && item.quantity > 0 ">
+                      <!-- 음식 및 물고기 -->
+                      <div class="card">
+                        <div class="card-image">
+                          <figure class="image is-4by3" style="border-bottom: 1px solid #ddd;">
+                            <img src="./resource/cat.png" alt="Placeholder image" />
+                          </figure>
+                        </div>
+                        <div class="card-content">
+                          <div class="media">
+                            <div class="media-left" style="width: 125px;">
+                              <p class="title is-5" style="align-items: center; align-content: center;">{{item.name}}
+                              </p>
+                            </div>
+                            <div class="media-content" style="width: 125px;">
+                              <p class="title is-6">수량 : {{item.quantity}}</p>
+                              <p class="subtitle is-7 mt-2">{{item.desc}}</p>
+                              <button v-if="item.type == 'food'" class="button is-primary">먹기</button>
+                              <button v-else></button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                    <div class="column is-3" v-else-if="item.type == 'fishing_rod' && item.durability > 0 ">
+                      <!-- 낚시대 -->
+                      <div class="card">
+                        <div class="card-image">
+                          <figure class="image is-4by3" style="border-bottom: 1px solid #ddd;">
+                            <img src="./resource/cat.png" alt="Placeholder image" />
+                          </figure>
+                        </div>
+                        <div class="card-content">
+                          <div class="media" style="height: 80px;">
+                            <div class="media-left" style="width: 125px;">
+                              <p class="title is-5" style="align-items: center; align-content: center;">{{item.name}}
+                              </p>
+                            </div>
+                            <div class="media-content" style="width: 125px;">
+                              <p class="title is-6">내구도 : {{item.durability}}</p>
+                              <p class="subtitle is-7">수심 : {{item.grade}}</p>
+                              <button class="button is-primary" v-if="item.equipped < 0" onclick="">장착하기</button>
+                              <div class="button is-primary" v-else>장착중</div>
+
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+
+                <!-- GAME Component -->
+                <div id="game"
+                  style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
+                  <p class="title">방향키를 순서대로 누르세요!</p>
+                  <div id="current-key"></div>
+                  <button id="close-game-button"
+                    style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
+                    게임 종료
+                  </button>
+                  <div class="" style="margin-top: 10px;"></div>
+                </div>
+
+
+                <!--  -->
+                <div class="modal" id="item-modal">
+                  <div class="modal-background"></div>
+                  <div class="modal-content"
+                    style="width: 1300px; margin-top: 10%; max-height: 600px; overflow-y: auto;">
+                    <div class="box">
+                      <h1 class="title">낚시 아이템 상점</h1>
+                      <div class="columns is-multiline" style="width: 1200px; margin: 0 auto;">
+                        <div class="column is-one-third" v-for="item in shop" :key="item.name">
+                          <div class="card">
+                            <div class="card-content" style="width: 400px;">
+                              <p class="title">{{item.name}}</p>
+                              <p class="subtitle" style="margin: 10px 0;">수심: {{item.desc}}</p>
+                              <p class="subtitle" style="margin: 10px 0;">내구도: {{item.durability}}</p>
+                              <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
+                              <button class="button is-success">구매</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <h1 class="title mt-6">음식 상점</h1>
+                      <div class="columns is-multiline" style="width: 1200px; margin: 0 auto;">
+                        <div class="column is-one-third" v-for="item in food" :key="item.name">
+                          <div class="card">
+                            <div class="card-content" style="width: 400px;">
+                              <p class="title">{{item.name}}</p>
+                              <p class="subtitle" style="margin: 10px 0;"> 포만감: {{item.saturation}}</p>
+                              <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
+                              <button class="button is-success">구매</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="button is-light" id="close-modal">닫기</button>
+                    </div>
+                  </div>
+                  <button class="modal-close is-large" aria-label="close"></button>
+                </div>
+
+                <!--  -->
+                <div class="modal" id="fish-modal">
+                  <div class="modal-background"></div>
+                  <div class="modal-card" style="width: 1300px; margin: 0 auto;">
+                    <div class="table-container">
+                      <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                        <thead>
+                          <tr>
+                            <th>이미지</th>
+                            <th>물고기 이름</th>
+                            <th>가격</th>
+                            <th>보유 수량</th>
+                            <th>판매 수량</th>
+                            <th>매도 버튼</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
+                            <td>고등어</td>
+                            <td>10,000원</td>
+                            <td>5</td>
+                            <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
+                            <td><button class="button is-danger is-small">Sell</button></td>
+                          </tr>
+                          <tr>
+                            <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
+                            <td>참치</td>
+                            <td>25,000원</td>
+                            <td>2</td>
+                            <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
+                            <td><button class="button is-danger is-small">Sell</button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
                   </div>
                 </div>
               </div>
             </div>
-
-            <!-- GAME Component -->
-            <div id="game"
-              style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
-              <p class="title">방향키를 순서대로 누르세요!</p>
-              <div id="current-key"></div>
-              <button id="close-game-button"
-                style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
-                게임 종료
-              </button>
-              <div class="" style="margin-top: 10px;"></div>
-            </div>
-
-
-            <!--  -->
-            <div class="modal" id="item-modal">
-              <div class="modal-background"></div>
-              <div class="modal-content" style="width: 1300px; margin-top: 10%; max-height: 600px; overflow-y: auto;">
-                <div class="box">
-                  <h1 class="title">낚시 아이템 상점</h1>
-                  <div class="columns is-multiline" style="width: 1200px; margin: 0 auto;">
-                    <div class="column is-one-third" v-for="item in shop" :key="item.name">
-                      <div class="card">
-                        <div class="card-content" style="width: 400px;">
-                          <p class="title">{{item.name}}</p>
-                          <p class="subtitle" style="margin: 10px 0;">수심: {{item.desc}}</p>
-                          <p class="subtitle" style="margin: 10px 0;">내구도: {{item.durability}}</p>
-                          <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
-                          <button class="button is-success">구매</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <h1 class="title mt-6">음식 상점</h1>
-                  <div class="columns is-multiline" style="width: 1200px; margin: 0 auto;">
-                    <div class="column is-one-third" v-for="item in food" :key="item.name">
-                      <div class="card">
-                        <div class="card-content" style="width: 400px;">
-                          <p class="title">{{item.name}}</p>
-                          <p class="subtitle" style="margin: 10px 0;"> 포만감: {{item.saturation}}</p>
-                          <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
-                          <button class="button is-success">구매</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <button class="button is-light" id="close-modal">닫기</button>
-                </div>
-              </div>
-              <button class="modal-close is-large" aria-label="close"></button>
-            </div>
-
-            <!--  -->
-            <div class="modal" id="fish-modal">
-              <div class="modal-background"></div>
-              <div class="modal-card" style="width: 1300px; margin: 0 auto;">
-                <div class="table-container">
-                  <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-                      <thead>
-                          <tr>
-                              <th>이미지</th>
-                              <th>물고기 이름</th>
-                              <th>가격</th>
-                              <th>보유 수량</th>
-                              <th>판매 수량</th>
-                              <th>매도 버튼</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr>
-                              <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
-                              <td>고등어</td>
-                              <td>10,000원</td>
-                              <td>5</td>
-                              <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
-                              <td><button class="button is-danger is-small">Sell</button></td>
-                          </tr>
-                          <tr>
-                              <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
-                              <td>참치</td>
-                              <td>25,000원</td>
-                              <td>2</td>
-                              <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
-                              <td><button class="button is-danger is-small">Sell</button></td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-              
-          </div>
-          </div>
-        </div>
-      </div>
     </section>
   </div>
   <script type="module">
@@ -282,7 +319,6 @@
           cat: "fishing1",
           items: [
             { name: '비트참치', desc: '매우 값비싼 비트참치', "type": '', quantity: 1 },
-            
           ],
           shop: [
             { name: '중국산 대나무 낚싯대', desc: 'shallow', durability: '40', price: '8,900' },
@@ -343,7 +379,7 @@
           // 유저의 인벤토리 조회
           const username = sessionStorage.getItem('username');
           $.ajax({
-            url: this.host+":"+this.port+'/v1/game/inventory',
+            url: this.host + ":" + this.port + '/v1/game/inventory',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -371,7 +407,7 @@
           const username = sessionStorage.getItem('username');
 
           $.ajax({
-            url: this.host+":"+this.port+'/v1/game/fail',
+            url: this.host + ":" + this.port + '/v1/game/fail',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -399,7 +435,7 @@
           const username = sessionStorage.getItem('username');
 
           $.ajax({
-            url: this.host+":"+this.port+'/v1/game/success',
+            url: this.host + ":" + this.port + '/v1/game/success',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -427,7 +463,7 @@
           username = sessionStorage.getItem('username');
 
           $.ajax({
-            url: this.host+":"+this.port+'/v1/game/fishing_rod',
+            url: this.host + ":" + this.port + '/v1/game/fishing_rod',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -451,7 +487,7 @@
           const username = sessionStorage.getItem('username');
 
           $.ajax({
-            url: this.host+":"+this.port+'/v1/market/item/buy',
+            url: this.host + ":" + this.port + '/v1/market/item/buy',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -475,7 +511,7 @@
           const username = sessionStorage.getItem('username');
 
           $.ajax({
-            url: this.host+":"+this.port+'/v1/market/fish/sell',
+            url: this.host + ":" + this.port + '/v1/market/fish/sell',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -499,7 +535,7 @@
           const username = sessionStorage.getItem('username');
 
           $.ajax({
-            url: this.host+":"+this.port+'/v1/food',
+            url: this.host + ":" + this.port + '/v1/food',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -523,7 +559,7 @@
           const username = sessionStorage.getItem('username');
 
           $.ajax({
-            url: this.host+":"+this.port+'/v1/game/load',
+            url: this.host + ":" + this.port + '/v1/game/load',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -548,7 +584,7 @@
           const username = sessionStorage.getItem('username');
 
           $.ajax({
-            url: this.host+":"+this.port+'/v1/leaderboard',
+            url: this.host + ":" + this.port + '/v1/leaderboard',
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'
@@ -573,7 +609,7 @@
           const username = sessionStorage.getItem('username');
 
           $.ajax({
-            url: this.host+":"+this.port+'/v1/market',
+            url: this.host + ":" + this.port + '/v1/market',
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'
