@@ -212,7 +212,7 @@
                       <div class="card">
                         <div class="card-image">
                           <figure class="image is-4by3" style="border-bottom: 1px solid #ddd;">
-                            <img src="./resource/cat.png" alt="Placeholder image" />
+                            <img :src="fishing_rod_img[item.name]" alt="Placeholder image" />
                           </figure>
                         </div>
                         <div class="card-content">
@@ -237,7 +237,7 @@
                       <div class="card">
                         <div class="card-image">
                           <figure class="image is-4by3" style="border-bottom: 1px solid #ddd;">
-                            <img src="./resource/cat.png" alt="Placeholder image" />
+                            <img :src="fishing_rod_img[item.name]" alt="Placeholder image" />
                           </figure>
                         </div>
                         <div class="card-content">
@@ -341,7 +341,7 @@
               <tbody>
                 <template v-for="item in fish" :key="item.name">
                   <tr>
-                    <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
+                    <td><img :src="img[item.grade]" alt="물고기 이미지" class="fish-image"></td>
                     <td>{{item.name}}</td>
                     <td>{{item.price}}원</td>
                     <td><input type="number" class="input is-small" min="0" placeholder="판매 수량" v-model.number="item.count"></td>
@@ -381,17 +381,13 @@
             { name: '비트참치', desc: '매우 값비싼 비트참치', "type": '' },
           ],
 
-
-
-
-
           shop: [
-            { name: '중국산 대나무 낚싯대', desc: 'shallow', durability: '40', price: 8900 },
-            { name: '독일산 목재 낚싯대', desc: 'shallow', durability: '150', price: 20000 },
-            { name: '중국산 탄소섬유 낚싯대', desc: 'thermocline', durability: '90', price: 69990 },
-            { name: '독일산 카본 낚싯대', desc: 'thermocline', durability: '200', price: 118000 },
-            { name: '중국산 유리섬유 낚싯대', desc: 'deep', durability: '100', price: 191950 },
-            { name: '독일산 글라스 낚싯대', desc: 'deep', durability: '250', price: 383900 },
+            { name: '중국산 대나무 낚싯대', desc: 'shallow', durability: '40', price: 8900, img: "" },
+            { name: '독일산 목재 낚싯대', desc: 'shallow', durability: '150', price: 20000, img: "" },
+            { name: '중국산 탄소섬유 낚싯대', desc: 'thermocline', durability: '90', price: 69990, img: "" },
+            { name: '독일산 카본 낚싯대', desc: 'thermocline', durability: '200', price: 118000, img: "" },
+            { name: '중국산 유리섬유 낚싯대', desc: 'deep', durability: '100', price: 191950, img: "" },
+            { name: '독일산 글라스 낚싯대', desc: 'deep', durability: '250', price: 383900, img: "" },
           ],
           food: [
             { name: '회 한 점', saturation: 5, price: 550 },
@@ -406,7 +402,21 @@
             { name: '탕후루', saturation: 50, price: 4250 },
             { name: '마라탕', saturation: 55, price: 4700 },
           ],
-
+          img: {
+            'shallow': 'resource/fishes/shallow.png',
+            'thermocline': 'resource/fishes/thermocline.png',
+            'deep': 'resource/fishes/deep.png'
+          },
+          fishing_rod_img: {
+            '초보자 낚싯대': "./resource/rod/beginner.png",
+            '중국산 대나무 낚싯대': "./resource/rod/chinese_bamboo.png",
+            '독일산 목재 낚싯대': "./resource/rod/german_wooden.png",
+            '중국산 탄소섬유 낚싯대': "./resource/rod/chinese_carbon.png",
+            '독일산 카본 낚싯대': "./resource/rod/german_carbon.png",
+            '중국산 유리섬유 낚싯대': "./resource/rod/chinese_glass.png",
+            '독일산 글라스 낚싯대': "./resource/rod/german_glass.png",
+          },
+          
           fish: []
         }
       },
