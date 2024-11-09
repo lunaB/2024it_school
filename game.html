@@ -11,7 +11,7 @@
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="common.js"></script>
-  <script src="game.js"></script>
+  
   <style>
     #app {
       max-height: 1000px;
@@ -88,6 +88,30 @@
     .button.is-danger {
       margin-left: 10px;
     }
+
+    #game-result-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      /* 반투명한 검은 배경 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      /* 다른 요소 위에 표시 */
+      display: none;
+      /* 초기에는 숨겨진 상태 */
+    }
+
+    #game-result-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
   </style>
 </head>
 
@@ -141,7 +165,7 @@
           <img src="./resource/바다.png" alt="" style="position: absolute; top: 50px; right: 300px; width: 2000px; height: 100%;">
             <!-- GAME Component -->
 
-
+            
             <!-- Player -->
             <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);">
               <div>
@@ -265,24 +289,23 @@
       </div>
 
       <!-- GAME Component -->
-      <div id="game" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
+      <div id="game"
+        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
         <p class="title">방향키를 순서대로 누르세요!</p>
-        <div id="current-key"></div>
+        <img id="current-key" alt="Key Image">
         <button id="close-game-button"
           style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
           게임 종료
         </button>
         <div class="" style="margin-top: 10px;"></div>
       </div>
-      <!-- GAME Component -->
-      <div id="game" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
-        <p class="title">방향키를 순서대로 누르세요!</p>
-        <div id="current-key"></div>
-        <button id="close-game-button"
-          style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
-          게임 종료
-        </button>
-        <div class="" style="margin-top: 10px;"></div>
+
+      <div id="game-result-overlay">
+        <div id="game-result-content">
+          <p>You won/lost the game!</p>
+          <button id="replay-fishing-game">다시하기</button>
+          <button id="finish-fishing-game">낚시종료</button>
+        </div>
       </div>
 
       <!--  -->
@@ -362,7 +385,7 @@
   <script type="module">
     import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 
-    const app = createApp({
+    export const app = createApp({
       mounted() {
         this.loadGameData()
       },
@@ -577,6 +600,7 @@
                 console.log('Item bought successfully');
 
                 this.loadGameData();
+                
 
               } else {
                 console.error('Failed to buy item');
@@ -668,9 +692,9 @@
                 this.money = response.price
                 // 배고픔
                 this.hunger = response.hunger
-                
-
-                console.log(response)
+                // 낚시
+                this.current_depth_level = response.current_depth_level
+                console.log(response.current_depth_level)
               } else {
                 console.error('Failed to load game data');
               }
@@ -742,13 +766,13 @@
           });
         }
       }
-    })
-    app.mount('#app');
-
+    }).mount('#app');
+    window.appData = app.$data;
   </script>
   <script>
     var a = 0;
   </script>
+  <script src="game.js"></script>
 </body>
 
 </html>
