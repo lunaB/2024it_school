@@ -64,6 +64,25 @@
     .button.is-danger {
       margin-left: 10px;
     }
+
+    th {
+      background-color: #00d1b2;
+      color: white;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+
+    .fish-image {
+      width: 50px;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .button.is-danger {
+      margin-left: 10px;
+    }
   </style>
 </head>
 
@@ -143,7 +162,12 @@
             <!-- money -->
             <div class="myMoney" style="text-align: right;">
               <p class="price" style="font-size: 20px; font-weight: 900;">보유 머니: <span
-                  style="font-weight: 100;">{{moeny}}</span>원</p>
+                  style="font-weight: 100;">{{money}}</span>원</p>
+            </div>
+
+            <div class="myMoney" style="text-align: right;">
+              <p class="price" style="font-size: 20px; font-weight: 900;">포만도: <span
+                  style="font-weight: 100;">{{hunger}}</span>%</p>
             </div>
 
             <!-- Navigator -->
@@ -202,7 +226,8 @@
                             <div class="media-content" style="width: 125px;">
                               <p class="title is-6">수량 : {{item.quantity}}</p>
                               <p class="subtitle is-7 mt-2">{{item.desc}}</p>
-                              <button v-if="item.type == 'food'" class="button is-primary">먹기</button>
+                              <button v-if="item.type == 'food'" class="button is-primary"
+                                v-on:click="eatFood(item.name)">먹기</button>
                               <button v-else></button>
                             </div>
                           </div>
@@ -226,8 +251,8 @@
                             <div class="media-content" style="width: 125px;">
                               <p class="title is-6">내구도 : {{item.durability}}</p>
                               <p class="subtitle is-7">수심 : {{item.grade}}</p>
-                              <button class="button is-primary" v-if="item.equipped > 0" onclick="">장착중</button>
-                              <div class="button is-primary" v-else @click="equipFishingRod">장착하기</div>
+                              <button class="button is-primary" v-if="item.equipped > 0">장착중</button>
+                              <div class="button is-primary" v-else v-on:click="equipFishingRod(item.name)">장착하기</div>
                             </div>
                           </div>
                         </div>
@@ -237,121 +262,138 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <!-- GAME Component -->
-            <div id="game"
-              style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
-              <p class="title">방향키를 순서대로 누르세요!</p>
-              <div id="current-key"></div>
-              <button id="close-game-button"
-                style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
-                게임 종료
-              </button>
-              <div class="" style="margin-top: 10px;"></div>
-            </div>
+      <!-- GAME Component -->
+      <div id="game" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
+        <p class="title">방향키를 순서대로 누르세요!</p>
+        <div id="current-key"></div>
+        <button id="close-game-button"
+          style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
+          게임 종료
+        </button>
+        <div class="" style="margin-top: 10px;"></div>
+      </div>
+      <!-- GAME Component -->
+      <div id="game" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
+        <p class="title">방향키를 순서대로 누르세요!</p>
+        <div id="current-key"></div>
+        <button id="close-game-button"
+          style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
+          게임 종료
+        </button>
+        <div class="" style="margin-top: 10px;"></div>
+      </div>
 
-            <!--  -->
-            <div class="modal" id="item-modal">
-              <div class="modal-background"></div>
-              <div class="modal-content" style="width: 1300px; margin-top: 10%; max-height: 600px; overflow-y: auto;">
-                <div class="box">
-                  <h1 class="title">낚시 아이템 상점</h1>
-                  <div class="columns is-multiline" style="width: 1200px; margin: 0 auto;">
-                    <div class="column is-one-third" v-for="item in shop" :key="item.name">
-                      <div class="card">
-                        <div class="card-content" style="width: 400px;">
-                          <p class="title">{{item.name}}</p>
-                          <p class="subtitle" style="margin: 10px 0;">수심: {{item.desc}}</p>
-                          <p class="subtitle" style="margin: 10px 0;">내구도: {{item.durability}}</p>
-                          <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
-                          <button class="button is-success" v-on:click="buyItem(item)">구매</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <h1 class="title mt-6">음식 상점</h1>
-                  <div class="columns is-multiline" style="width: 1200px; margin: 0 auto;">
-                    <div class="column is-one-third" v-for="item in food" :key="item.name">
-                      <div class="card">
-                        <div class="card-content" style="width: 400px;">
-                          <p class="title">{{item.name}}</p>
-                          <p class="subtitle" style="margin: 10px 0;">포만감: {{item.saturation}}</p>
-                          <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
-                          <button class="button is-success" v-on:click="buyItem(item)">구매</button>
-                        </div>
-                      </div>
-                    </div>
+      <!--  -->
+      <div class="modal" id="item-modal">
+        <div class="modal-background"></div>
+        <div class="modal-content" style="width: 1300px; margin-top: 10%; max-height: 600px; overflow-y: auto;">
+          <div class="box">
+            <h1 class="title">낚시 아이템 상점</h1>
+            <div class="columns is-multiline" style="width: 1200px; margin: 0 auto;">
+              <div class="column is-one-third" v-for="item in shop" :key="item.name">
+                <div class="card">
+                  <div class="card-content" style="width: 400px;">
+                    <p class="title">{{item.name}}</p>
+                    <p class="subtitle" style="margin: 10px 0;">수심: {{item.desc}}</p>
+                    <p class="subtitle" style="margin: 10px 0;">내구도: {{item.durability}}</p>
+                    <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
+                    <button class="button is-success" v-on:click="buyItem(item)">구매</button>
                   </div>
                 </div>
               </div>
-              <button class="modal-close is-large" aria-label="close" @click="exitShop"></button>
             </div>
-
-            <!--  -->
-            <div class="modal" id="fish-modal">
-              <div class="modal-background"></div>
-              <div class="modal-card" style="width: 1300px; margin: 0 auto;">
-                <div class="table-container">
-                  <table class="table is-bordered is-striped is-hoverable is-fullwidth"
-                    style="margin-top: 100px; height: 800px;">
-                    <thead>
-                      <tr>
-                        <th>이미지</th>
-                        <th>물고기 이름</th>
-                        <th>가격</th>
-                        <th>보유 수량</th>
-                        <th>판매 수량</th>
-                        <th>매도 버튼</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
-                        <td>고등어</td>
-                        <td>10,000원</td>
-                        <td>5</td>
-                        <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
-                        <td><button class="button is-danger is-small">Sell</button></td>
-                      </tr>
-                      <tr>
-                        <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
-                        <td>참치</td>
-                        <td>25,000원</td>
-                        <td>2</td>
-                        <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
-                        <td><button class="button is-danger is-small">Sell</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <button class="modal-close is-large" aria-label="close" @click="exitFishShop"></button>
+            <h1 class="title mt-6">음식 상점</h1>
+            <div class="columns is-multiline" style="width: 1200px; margin: 0 auto;">
+              <div class="column is-one-third" v-for="item in food" :key="item.name">
+                <div class="card">
+                  <div class="card-content" style="width: 400px;">
+                    <p class="title">{{item.name}}</p>
+                    <p class="subtitle" style="margin: 10px 0;">포만감: {{item.saturation}}</p>
+                    <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
+                    <button class="button is-success" v-on:click="buyItem(item)">구매</button>
+                  </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
-    </section>
+        <button class="modal-close is-large" aria-label="close" @click="exitShop"></button>
+      </div>
+
+      <!--  -->
+      <div class="modal" id="fish-modal">
+        <div class="modal-background"></div>
+        <div class="modal-card" style="width: 1300px; margin: 0 auto;">
+          <div class="table-container">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth"
+              style="margin-top: 100px; height: 800px;">
+              <thead>
+                <tr>
+                  <th>이미지</th>
+                  <th>물고기 이름</th>
+                  <th>가격</th>
+                  <th>판매 수량</th>
+                  <th>매도 버튼</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-for="item in fish" :key="item.name">
+                  <tr>
+                    <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.price}}원</td>
+                    <td><input type="number" class="input is-small" min="0" placeholder="판매 수량" v-model.number="count"></td>
+                    <td><button class="button is-danger is-small" v-on:click="sellFish(item.name,count)">Sell</button></td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+            <button class="modal-close is-large" aria-label="close" @click="exitFishShop"></button>
+          </div>
+
+        </div>
+      </div>
+  </div>
+  </div>
+  </section>
   </div>
   <script type="module">
     import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 
     const app = createApp({
+      mounted() {
+        this.loadGameData()
+      },
       data() {
         return {
           host: "http://192.168.202.21",
           port: "8080",
-          moeny: 10000,
+
+          money: 0,
+          hunger: 0,
+
+          count : 0,
+
           cat: "fishing1",
           items: [
-            { name: '비트참치', desc: '매우 값비싼 비트참치', "type": '', quantity: 1 },
+            { name: '비트참치', desc: '매우 값비싼 비트참치', "type": '' },
           ],
+
+
+
+
+
           shop: [
-            { name: '중국산 대나무 낚싯대', desc: 'shallow', durability: '40', price: '8,900' },
-            { name: '독일산 목재 낚싯간', desc: 'shallow', durability: '150', price: '20,000' },
-            { name: '중국산 탄소섬유 낚싯대', desc: 'thermocline', durability: '90', price: '69,990' },
-            { name: '독일산 카본 낚싯대', desc: 'thermocline', durability: '200', price: '118,000' },
-            { name: '중국산 유리섬유 낚싯대', desc: 'deep', durability: '100', price: '191,950' },
-            { name: '독일산 글라스 낚싯대', desc: 'deep', durability: '250', price: '383,900' },
+            { name: '중국산 대나무 낚싯대', desc: 'shallow', durability: '40', price: '8900' },
+            { name: '독일산 목재 낚싯간', desc: 'shallow', durability: '150', price: '20000' },
+            { name: '중국산 탄소섬유 낚싯대', desc: 'thermocline', durability: '90', price: '69990' },
+            { name: '독일산 카본 낚싯대', desc: 'thermocline', durability: '200', price: '118000' },
+            { name: '중국산 유리섬유 낚싯대', desc: 'deep', durability: '100', price: '191950' },
+            { name: '독일산 글라스 낚싯대', desc: 'deep', durability: '250', price: '383900' },
           ],
           food: [
             { name: '회 한 점', saturation: 5, price: 550 },
@@ -365,7 +407,9 @@
             { name: '월병', saturation: 45, price: 400 },
             { name: '탕후루', saturation: 50, price: 4250 },
             { name: '마라탕', saturation: 55, price: 4700 },
-          ]
+          ],
+
+          fish: []
         }
       },
 
@@ -382,6 +426,7 @@
         // 물고기 장터  
         showFishShop() {
           document.querySelector('#fish-modal').style.display = "block"
+          this.fishes()
         },
         exitFishShop() {
           document.querySelector('#fish-modal').style.display = "none"
@@ -395,18 +440,11 @@
           document.querySelector('#item-modal').style.display = "none"
         },
 
-        
-
         // 낚시 하기
         fishing() {
           // 1. 방향키를 랜덤으로 생성
           // 2. 방향키를 순서대로 누르게 함
           // 3. 누르는 방향키가 맞으면 성공, 아니면 실패
-        },
-
-        // 정보 조회
-        loadInfo() {
-          // 유저의 모든 변경사항 업데이트
         },
 
         // 인벤토리 조회
@@ -438,13 +476,42 @@
           });
         },
 
+        //보유 물고기 상태 
+        fishes() {
+          const username = sessionStorage.getItem('username');
+          $.ajax({
+            url: this.host + ":" + this.port + '/v1/game/inventory',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({ username: username }),
+            success: (response) => {
+              if (response.success) {
+                let arr = []
+                let data = response.items
+                data.forEach(e => {
+                  if (e.type == "fish" && e.quantity > 0) {
+                    arr.push(e.name)
+                  }
+                });
+                this.getMarket(arr)
+              } else {
+                console.error('Failed to fetch inventory');
+              }
 
-
+            },
+            error: (error) => {
+              console.error('Error fetching inventory:', error);
+            }
+          });
+        },
 
         // 낚시대 장착
         // POST /v1/game/fishing_rod
         equipFishingRod(fishingRodName) {
-          username = sessionStorage.getItem('username');
+          const username = sessionStorage.getItem('username');
+          console.log(fishingRodName.name);
 
           $.ajax({
             url: this.host + ":" + this.port + '/v1/game/fishing_rod',
@@ -455,9 +522,10 @@
             data: JSON.stringify({ username: username, fishing_rod: fishingRodName }),
             success: (response) => {
               console.log(response);
-              
+
               if (response.success) {
                 console.log('Fishing rod equipped successfully');
+                this.inventory()
               } else {
                 console.error('Failed to equip fishing rod');
               }
@@ -472,17 +540,16 @@
         // POST /v1/market/item/buy
         buyItem(item) {
           const username = sessionStorage.getItem('username');
-          const myMoney = document.querySelector('.myMoney span').textContent;
 
           console.log(item);
-          console.log(myMoney);
+          console.log(this.money);
+          console.log(item.price);
 
-          if (myMoney < item.price) {
-            alert('돈이 부족합니다.')
+          if (this.money < item.price) {
+            alert('돈이 부족합니다..')
+            return
           } else {
-            alert('구매 완료')
-            myMoney += item.price
-
+            alert('구매 완료!')
           }
 
           $.ajax({
@@ -491,16 +558,19 @@
             headers: {
               'Content-Type': 'application/json'
             },
-            data: JSON.stringify({ username: username, market_item: itemName }),
+            data: JSON.stringify({ username: username, market_item: item.name, "isfood": (item.saturation == undefined ? 0 : 1) }),
             success: (response) => {
               if (response.success) {
                 console.log('Item bought successfully');
+
+                this.loadGameData();
+
               } else {
                 console.error('Failed to buy item');
               }
             },
             error: (error) => {
-              console.error('Error buying item:', error);
+              console.log(1)
             }
           });
         },
@@ -517,9 +587,16 @@
             },
             data: JSON.stringify({ username: username, fish_name: fishName, quantity: quantity }),
             success: (response) => {
+              console.log(response);
+              
               if (response.success) {
                 console.log('Fish sold successfully');
+                alert('판매가 완료 되었습니다.')
+                this.loadGameData()
+                this.getMarket()
+
               } else {
+                alert(response.errormessage)
                 console.error('Failed to sell fish');
               }
             },
@@ -532,6 +609,7 @@
         // 음식 먹기
         eatFood(foodName) {
           const username = sessionStorage.getItem('username');
+          console.log(foodName);
 
           $.ajax({
             url: this.host + ":" + this.port + '/v1/food',
@@ -543,6 +621,8 @@
             success: (response) => {
               if (response.success) {
                 console.log('Food eaten successfully');
+                this.inventory()
+                this.loadGameData()
               } else {
                 console.error('Failed to eat food');
               }
@@ -568,6 +648,13 @@
               if (response.success) {
                 console.log('Game data loaded successfully');
                 // Handle the loaded game data here
+
+                // 돈
+                this.money = response.price
+                // 배고픔
+                this.hunger = response.hunger
+
+                console.log(response)
               } else {
                 console.error('Failed to load game data');
               }
@@ -606,18 +693,25 @@
         // 상점 조회
         getMarket(fishes) {
           const username = sessionStorage.getItem('username');
-
+          console.log(fishes);
+          let fishestext = ""
+          for (var i = 0; i < fishes.length; i++) {
+            fishestext = fishestext + "&fishes=";
+            fishestext = fishestext + fishes[i]
+          }
           $.ajax({
-            url: this.host + ":" + this.port + '/v1/market',
+            url: this.host + ":" + this.port + `/v1/market?username=${username}${fishestext}`,
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'
-            },
-            data: JSON.stringify({ username: username, fishes: fishes }),
+            },  
+            // data: JSON.stringify({ username: username, fishes: fishes }),
             success: (response) => {
+              console.log(response.fishes);
               if (response.success) {
                 console.log('Market data fetched successfully');
                 // Handle the market data here
+                this.fish = response.fishes
               } else {
                 console.error('Failed to fetch market data');
               }
@@ -629,7 +723,11 @@
         }
       }
     })
-    app.mount('#app')
+    app.mount('#app');
+
+  </script>
+  <script>
+    var a = 0;
   </script>
 </body>
 
