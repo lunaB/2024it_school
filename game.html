@@ -5,7 +5,7 @@
   <meta charset="utf-8">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hello Bulma!</title>
+  <title>낚시인생!</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -99,7 +99,7 @@
             </a>
 
             <a class="navbar-item" href="aboutus.html">
-              프로젝트 소개
+              랭킹
             </a>
           </div>
 
@@ -313,18 +313,18 @@
                       <tr>
                         <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
                         <td>고등어</td>
-                        <td>10,000원</td>
+                        <td>10000원</td>
                         <td>5</td>
                         <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
-                        <td><button class="button is-danger is-small">Sell</button></td>
+                        <td><button class="button is-danger is-small" @click="sellBtn">Sell</button></td>
                       </tr>
                       <tr>
                         <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
                         <td>참치</td>
-                        <td>25,000원</td>
+                        <td>25000원</td>
                         <td>2</td>
                         <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
-                        <td><button class="button is-danger is-small">Sell</button></td>
+                        <td><button class="button is-danger is-small" @click="sellBtn">Sell</button></td>
                       </tr>
                     </tbody>
                   </table>
@@ -355,12 +355,12 @@
             { name: '비트참치', desc: '매우 값비싼 비트참치', "type": '', quantity: 1 },
           ],
           shop: [
-            { name: '중국산 대나무 낚싯대', desc: 'shallow', durability: '40', price: '8,900' },
-            { name: '독일산 목재 낚싯간', desc: 'shallow', durability: '150', price: '20,000' },
-            { name: '중국산 탄소섬유 낚싯대', desc: 'thermocline', durability: '90', price: '69,990' },
-            { name: '독일산 카본 낚싯대', desc: 'thermocline', durability: '200', price: '118,000' },
-            { name: '중국산 유리섬유 낚싯대', desc: 'deep', durability: '100', price: '191,950' },
-            { name: '독일산 글라스 낚싯대', desc: 'deep', durability: '250', price: '383,900' },
+            { name: '중국산 대나무 낚싯대', desc: 'shallow', durability: '40', price: 8900 },
+            { name: '독일산 목재 낚싯간', desc: 'shallow', durability: '150', price: 20000 },
+            { name: '중국산 탄소섬유 낚싯대', desc: 'thermocline', durability: '90', price: 69990 },
+            { name: '독일산 카본 낚싯대', desc: 'thermocline', durability: '200', price: 118000 },
+            { name: '중국산 유리섬유 낚싯대', desc: 'deep', durability: '100', price: 191950 },
+            { name: '독일산 글라스 낚싯대', desc: 'deep', durability: '250', price: 383900 },
           ],
           food: [
             { name: '회 한 점', saturation: 5, price: 550 },
@@ -391,6 +391,7 @@
         // 물고기 장터  
         showFishShop() {
           document.querySelector('#fish-modal').style.display = "block"
+          this.getMarket()
         },
         exitFishShop() {
           document.querySelector('#fish-modal').style.display = "none"
@@ -402,6 +403,11 @@
         },
         exitShop() {
           document.querySelector('#item-modal').style.display = "none"
+        },
+
+        // 물고기 매도 버튼 눌렀을 때
+        sellBtn() {
+          this.sellFish()
         },
 
         // 낚시 하기
@@ -509,6 +515,8 @@
         // 물고기 판매
         sellFish(fishName, quantity) {
           const username = sessionStorage.getItem('username');
+          console.log(fishName);
+          console.log(quantity);
 
           $.ajax({
             url: this.host + ":" + this.port + '/v1/market/fish/sell',
@@ -574,6 +582,7 @@
                 this.money = response.price
                 // 배고픔
                 this.hunger = response.hunger
+                
 
                 console.log(response)
               } else {
@@ -614,6 +623,7 @@
         // 상점 조회
         getMarket(fishes) {
           const username = sessionStorage.getItem('username');
+          // const fishes = 
 
           $.ajax({
             url: this.host + ":" + this.port + '/v1/market',
@@ -626,6 +636,8 @@
               if (response.success) {
                 console.log('Market data fetched successfully');
                 // Handle the market data here
+
+                console.log(response);
               } else {
                 console.error('Failed to fetch market data');
               }

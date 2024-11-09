@@ -25,7 +25,7 @@ $(document).ready(function() {
 
         sessionStorage.setItem('username', $('input[name="username"]').val()); // Save username in session storage
         
-        window.location.href = 'index.html'; // Redirect to main page
+        window.location.href = 'game.html'; // Redirect to main page
       },
       error: function(error) {
         // Handle login error
