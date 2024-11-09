@@ -45,23 +45,25 @@
     .button.is-danger {
       margin-left: 10px;
     }
-            margin: 20px;
-        }
-        th {
-            background-color: #00d1b2;
-            color: white;
-        }
-        td {
-            vertical-align: middle;
-        }
-        .fish-image {
-            width: 50px;
-            height: auto;
-            border-radius: 5px;
-        }
-        .button.is-danger {
-            margin-left: 10px;
-        }
+
+    th {
+      background-color: #00d1b2;
+      color: white;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+
+    .fish-image {
+      width: 50px;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .button.is-danger {
+      margin-left: 10px;
+    }
   </style>
 </head>
 
@@ -137,10 +139,11 @@
                 <progress class="progress is-primary" value="0" max="100">50%</progress>
               </div>
             </div>
-            
+
             <!-- money -->
             <div class="myMoney" style="text-align: right;">
-              <p class="price" style="font-size: 20px; font-weight: 900;">보유 머니: <span style="font-weight: 100;">{{moeny}}</span>원</p>
+              <p class="price" style="font-size: 20px; font-weight: 900;">보유 머니: <span
+                  style="font-weight: 100;">{{moeny}}</span>원</p>
             </div>
 
             <!-- Navigator -->
@@ -223,30 +226,29 @@
                             <div class="media-content" style="width: 125px;">
                               <p class="title is-6">내구도 : {{item.durability}}</p>
                               <p class="subtitle is-7">수심 : {{item.grade}}</p>
-                              <button class="button is-primary" v-if="item.equipped < 0" onclick="">장착하기</button>
-                              <div class="button is-primary" v-else>장착중</div>
-
+                              <button class="button is-primary" v-if="item.equipped > 0" onclick="">장착중</button>
+                              <div class="button is-primary" v-else @click="equipFishingRod">장착하기</div>
                             </div>
-
                           </div>
                         </div>
                       </div>
                     </div>
                   </template>
                 </div>
+              </div>
+            </div>
 
-                <!-- GAME Component -->
-                <div id="game"
-                  style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
-                  <p class="title">방향키를 순서대로 누르세요!</p>
-                  <div id="current-key"></div>
-                  <button id="close-game-button"
-                    style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
-                    게임 종료
-                  </button>
-                  <div class="" style="margin-top: 10px;"></div>
-                </div>
-
+            <!-- GAME Component -->
+            <div id="game"
+              style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
+              <p class="title">방향키를 순서대로 누르세요!</p>
+              <div id="current-key"></div>
+              <button id="close-game-button"
+                style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
+                게임 종료
+              </button>
+              <div class="" style="margin-top: 10px;"></div>
+            </div>
 
             <!--  -->
             <div class="modal" id="item-modal">
@@ -290,43 +292,44 @@
               <div class="modal-background"></div>
               <div class="modal-card" style="width: 1300px; margin: 0 auto;">
                 <div class="table-container">
-                  <table class="table is-bordered is-striped is-hoverable is-fullwidth" style="margin-top: 100px; height: 800px;">
-                      <thead>
-                          <tr>
-                            <th>이미지</th>
-                            <th>물고기 이름</th>
-                            <th>가격</th>
-                            <th>보유 수량</th>
-                            <th>판매 수량</th>
-                            <th>매도 버튼</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
-                            <td>고등어</td>
-                            <td>10,000원</td>
-                            <td>5</td>
-                            <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
-                            <td><button class="button is-danger is-small">Sell</button></td>
-                          </tr>
-                          <tr>
-                            <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
-                            <td>참치</td>
-                            <td>25,000원</td>
-                            <td>2</td>
-                            <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
-                            <td><button class="button is-danger is-small">Sell</button></td>
-                          </tr>
-                      </tbody>
+                  <table class="table is-bordered is-striped is-hoverable is-fullwidth"
+                    style="margin-top: 100px; height: 800px;">
+                    <thead>
+                      <tr>
+                        <th>이미지</th>
+                        <th>물고기 이름</th>
+                        <th>가격</th>
+                        <th>보유 수량</th>
+                        <th>판매 수량</th>
+                        <th>매도 버튼</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
+                        <td>고등어</td>
+                        <td>10,000원</td>
+                        <td>5</td>
+                        <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
+                        <td><button class="button is-danger is-small">Sell</button></td>
+                      </tr>
+                      <tr>
+                        <td><img src="https://via.placeholder.com/50" alt="물고기 이미지" class="fish-image"></td>
+                        <td>참치</td>
+                        <td>25,000원</td>
+                        <td>2</td>
+                        <td><input type="number" class="input is-small" placeholder="판매 수량"></td>
+                        <td><button class="button is-danger is-small">Sell</button></td>
+                      </tr>
+                    </tbody>
                   </table>
                   <button class="modal-close is-large" aria-label="close" @click="exitFishShop"></button>
+                </div>
+
               </div>
-              
-          </div>
+            </div>
           </div>
         </div>
-      </div>
     </section>
   </div>
   <script type="module">
@@ -376,6 +379,14 @@
           document.getElementById('inventory').style.display = "none";
         },
 
+        // 물고기 장터  
+        showFishShop() {
+          document.querySelector('#fish-modal').style.display = "block"
+        },
+        exitFishShop() {
+          document.querySelector('#fish-modal').style.display = "none"
+        },
+
         // 아이템 상점
         showShop() {
           document.querySelector('#item-modal').style.display = "block"
@@ -384,13 +395,7 @@
           document.querySelector('#item-modal').style.display = "none"
         },
 
-        // 물고기 상점
-        showFishShop() {
-          document.querySelector('#fish-modal').style.display = "block"
-        },
-        exitFishShop() {
-          document.querySelector('#fish-modal').style.display = "none"
-        },
+        
 
         // 낚시 하기
         fishing() {
@@ -433,9 +438,9 @@
           });
         },
 
-        
 
-        
+
+
         // 낚시대 장착
         // POST /v1/game/fishing_rod
         equipFishingRod(fishingRodName) {
@@ -449,6 +454,8 @@
             },
             data: JSON.stringify({ username: username, fishing_rod: fishingRodName }),
             success: (response) => {
+              console.log(response);
+              
               if (response.success) {
                 console.log('Fishing rod equipped successfully');
               } else {
@@ -466,7 +473,7 @@
         buyItem(item) {
           const username = sessionStorage.getItem('username');
           const myMoney = document.querySelector('.myMoney span').textContent;
-          
+
           console.log(item);
           console.log(myMoney);
 
