@@ -23,7 +23,6 @@
     }
     .table-container {
             margin: 20px;
-            overflow: auto;
         }
         th {
             background-color: #00d1b2;
@@ -115,6 +114,11 @@
                 <progress class="progress is-primary" value="0" max="100">50%</progress>
               </div>
             </div>
+            
+            <!-- money -->
+            <div class="myMoney" style="text-align: right;">
+              <p class="price" style="font-size: 20px; font-weight: 900;">보유 머니: <span style="font-weight: 100;">{{moeny}}</span>원</p>
+            </div>
 
             <!-- Navigator -->
             <div style="position: absolute; bottom:0; left:0">
@@ -204,7 +208,7 @@
                           <p class="subtitle" style="margin: 10px 0;">수심: {{item.desc}}</p>
                           <p class="subtitle" style="margin: 10px 0;">내구도: {{item.durability}}</p>
                           <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
-                          <button class="button is-success">구매</button>
+                          <button class="button is-success" v-on:click="buyItem(item)">구매</button>
                         </div>
                       </div>
                     </div>
@@ -217,15 +221,14 @@
                           <p class="title">{{item.name}}</p>
                           <p class="subtitle" style="margin: 10px 0;">포만감: {{item.saturation}}</p>
                           <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
-                          <button class="button is-success" v-on:click="buyItem(item.name)">구매</button>
+                          <button class="button is-success" v-on:click="buyItem(item)">구매</button>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <button class="button is-light" id="close-modal">닫기</button>
                 </div>
               </div>
-              <button class="modal-close is-large" aria-label="close"></button>
+              <button class="modal-close is-large" aria-label="close" @click="exitShop"></button>
             </div>
 
             <!--  -->
@@ -233,7 +236,7 @@
               <div class="modal-background"></div>
               <div class="modal-card" style="width: 1300px; margin: 0 auto;">
                 <div class="table-container">
-                  <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                  <table class="table is-bordered is-striped is-hoverable is-fullwidth" style="margin-top: 100px; height: 800px;">
                       <thead>
                           <tr>
                               <th>이미지</th>
@@ -263,6 +266,7 @@
                           </tr>
                       </tbody>
                   </table>
+                  <button class="modal-close is-large" aria-label="close" @click="exitFishShop"></button>
               </div>
               
           </div>
@@ -277,8 +281,9 @@
     const app = createApp({
       data() {
         return {
-          host: "http://localhost",
+          host: "http://192.168.202.21",
           port: "8080",
+          moeny: 10000,
           cat: "fishing1",
           items: [
             { name: '비트참치', desc: '매우 값비싼 비트참치', "type": '', quantity: 1 },
@@ -317,11 +322,21 @@
         exitInventory() {
           document.getElementById('inventory').style.display = "none";
         },
+
+        // 아이템 상점
         showShop() {
           document.querySelector('#item-modal').style.display = "block"
         },
+        exitShop() {
+          document.querySelector('#item-modal').style.display = "none"
+        },
+
+        // 물고기 상점
         showFishShop() {
           document.querySelector('#fish-modal').style.display = "block"
+        },
+        exitFishShop() {
+          document.querySelector('#fish-modal').style.display = "none"
         },
 
         // 낚시 하기
@@ -448,11 +463,20 @@
 
         // 아이템 구매
         // POST /v1/market/item/buy
-        buyItem(itemName) {
+        buyItem(item) {
           const username = sessionStorage.getItem('username');
+          const myMoney = document.querySelector('.myMoney span').textContent;
           
-          console.log('1');
-          console.log(itemName)
+          console.log(item);
+          console.log(myMoney);
+
+          if (myMoney < item.price) {
+            alert('돈이 부족합니다.')
+          } else {
+            alert('구매 완료')
+            myMoney += item.price
+
+          }
 
           $.ajax({
             url: this.host+":"+this.port+'/v1/market/item/buy',
