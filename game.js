@@ -1,6 +1,7 @@
 $(document).ready(function () {
 
-    let host = 'http://localhost:8080';
+    const host = 'http://localhost';
+    const port = '8080';
 
     const keySets = {
         easy: [
@@ -57,11 +58,6 @@ $(document).ready(function () {
         }, timePerKey);
     });
 
-    // 서버에서 requiredKeys 가져오기
-    function fetchRequiredKeys() {
-        
-    }
-
     // 현재 키를 화면에 표시
     function showNextKey() {
         if (currentKeyIndex < requiredKeys.length) {
@@ -76,6 +72,7 @@ $(document).ready(function () {
 
     // 키 입력 성공 시 진행
     $(document).keydown(function (event) {
+        
         if (event.key === requiredKeys[currentKeyIndex]) {
             gauge += 100 / requiredKeys.length; // 게이지 증가
             updateProgress();
@@ -91,6 +88,33 @@ $(document).ready(function () {
         }
     });
 
+    // 낚시 성공
+    // POST /v1/game/success
+    
+    function successGame() {
+      const username = sessionStorage.getItem('username');
 
+      $.ajax({
+        url: host+":"+port+'/v1/game/success',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({ username: username }),
+        success: (response) => {
+          if (response.success) {
+            console.log('Game success recorded successfully');
+          } else {
+            console.error('Failed to record game success');
+          }
+
+          // 성공동작
+          this.cat = "fishing3";
+        },
+        error: (error) => {
+          console.error('Error recording game success:', error);
+        }
+      });
+    }
 });
 
