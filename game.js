@@ -61,7 +61,8 @@ $(document).ready(function () {
     // 현재 키를 화면에 표시
     function showNextKey() {
         if (currentKeyIndex < requiredKeys.length) {
-            $("#current-key").text(`Press: ${requiredKeys[currentKeyIndex]}`);
+            const imagePath = `resource/arrowkeys/${requiredKeys[currentKeyIndex]}.png`
+            $("#current-key").attr("src", imagePath);
         }
     }
 
