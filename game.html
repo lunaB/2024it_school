@@ -215,9 +215,9 @@
                       <div class="card">
                         <div class="card-content" style="width: 400px;">
                           <p class="title">{{item.name}}</p>
-                          <p class="subtitle" style="margin: 10px 0;"> 포만감: {{item.saturation}}</p>
+                          <p class="subtitle" style="margin: 10px 0;">포만감: {{item.saturation}}</p>
                           <p class="subtitle" style="margin: 10px 0;">가격: {{item.price}} 원</p>
-                          <button class="button is-success">구매</button>
+                          <button class="button is-success" v-on:click="buyItem(item.name)">구매</button>
                         </div>
                       </div>
                     </div>
@@ -447,8 +447,12 @@
         },
 
         // 아이템 구매
+        // POST /v1/market/item/buy
         buyItem(itemName) {
           const username = sessionStorage.getItem('username');
+          
+          console.log('1');
+          console.log(itemName)
 
           $.ajax({
             url: this.host+":"+this.port+'/v1/market/item/buy',

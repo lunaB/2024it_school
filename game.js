@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    let host = 'http://localhost:8080';
+    let host = 'http://192.168.202.21:8080';
 
     const keySets = {
         easy: [
