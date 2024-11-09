@@ -37,6 +37,7 @@ $(document).ready(function () {
     // 게임 닫기
     $('#close-game-button').click(function (evnt) {
         $('#game').css('display', 'none');
+        endGame();
     })
 
     // 게임 실행 함수
@@ -65,11 +66,12 @@ $(document).ready(function () {
             if (elapsed >= timeLimit) {
                 clearInterval(intervalId);
                 failGame();
-                $(document).off("keydown"); // 키 입력 이벤트 제거
+                endGame();
             }
         }, timePerKey);
     }
 
+    // 시간 카운트 다운 리셋 + keydown 이벤트 제거
     function endGame() {
         gameActive = false;
         clearInterval(intervalId);
@@ -87,6 +89,7 @@ $(document).ready(function () {
             if (currentKeyIndex === requiredKeys.length) {
                 clearInterval(intervalId); // 타이머 중지
                 successGame();
+                endGame();
             } else {    
                 showNextKey(); // 다음 키로 넘어가기
             }
