@@ -141,7 +141,7 @@
           <img src="./resource/바다.png" alt="" style="position: absolute; top: 50px; right: 300px; width: 2000px; height: 100%;">
             <!-- GAME Component -->
 
-
+            
             <!-- Player -->
             <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);">
               <div>
@@ -265,24 +265,23 @@
       </div>
 
       <!-- GAME Component -->
-      <div id="game" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
+      <div id="game"
+        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
         <p class="title">방향키를 순서대로 누르세요!</p>
-        <div id="current-key"></div>
+        <img id="current-key" alt="Key Image">
         <button id="close-game-button"
           style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
           게임 종료
         </button>
         <div class="" style="margin-top: 10px;"></div>
       </div>
-      <!-- GAME Component -->
-      <div id="game" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display:none;">
-        <p class="title">방향키를 순서대로 누르세요!</p>
-        <div id="current-key"></div>
-        <button id="close-game-button"
-          style="position: absolute; top: -50px; right: 10px;transform: translate(-50%, -50%); padding: 5px 10px; cursor: pointer;">
-          게임 종료
-        </button>
-        <div class="" style="margin-top: 10px;"></div>
+
+      <div id="game-result-overlay">
+        <div id="game-result-content">
+          <p>You won/lost the game!</p>
+          <button id="replay-fishing-game">다시하기</button>
+          <button id="finish-fishing-game">낚시종료</button>
+        </div>
       </div>
 
       <!--  -->
