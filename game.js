@@ -23,9 +23,9 @@ $(document).ready(function () {
           ["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowUp", "ArrowRight"]
       ]
   };
-
   let gameActive = false;
-  let difficulty = window.appData.fishing_rods.find(rod => rod.equipped === 1).grade || "thermocline";
+  let difficulty = window.appData.current_depth_level || "thermocline";
+  console.log(window.appData.current_depth_level)
   let selectedKeys = keySets[difficulty];
   let requiredKeys = selectedKeys[Math.floor(Math.random() * selectedKeys.length)];
 
@@ -109,8 +109,6 @@ $(document).ready(function () {
 
   // 게이지 업데이트
   function updateProgress() {
-      console.log("update")
-      console.log(gauge)
       $(".progress").attr("value", `${gauge}`);
   }
 
