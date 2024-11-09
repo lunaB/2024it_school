@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+    // if (window.appData) {
+    //     console.log(window.appData)
+    // }
     const host = 'http://localhost';
     const port = '8080';
 
@@ -32,8 +35,6 @@ $(document).ready(function () {
     const timePerKey = 1000; // 키당 1초
     let intervalId;
 
-
-
     // 게임 닫기
     $('#close-game-button').click(function (evnt) {
         $('#game').css('display', 'none');
@@ -46,6 +47,9 @@ $(document).ready(function () {
     });
 
     function startGame() {
+
+        
+
         // 낚시 동작
         app.cat = 'fishing2';
 
@@ -186,6 +190,7 @@ $(document).ready(function () {
 
     $('#finish-fishing-game').click(function (evnt) {
         $("#game-result-overlay").css("display", 'none');
+        $('#game').css('display', 'none');
         $("#id").css("display", 'none');
     })
 });
